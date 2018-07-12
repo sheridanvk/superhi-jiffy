@@ -8,10 +8,10 @@ const clearSearchEl = document.querySelector('.search-clear');
 const handleSearchInput = event => {
   const searchTerm = searchInputEl.value
   
-  if ((event.type === 'keyup' && event.key === 'Enter') 
-       || event.type === 'click') {
-    searchInputEl.blur()
-    fetchSearchResults(searchTerm)
+  if (searchTerm.length > 0) {
+    fetchSearchResults(searchTerm)  
+  } else {
+    updateSearchHint('too-short')
   }
 }
 
@@ -103,6 +103,9 @@ const updateSearchHint = (message, searchTerm = '') => {
   } else if (message === "connection-down") {
     searchHintDesktopEl.innerHTML = `Sorry, we can't seem to connect to Giphy. Try later!`
     searchHintMobileEl.innerHTML = `Sorry, we can't seem to connect to Giphy. Try later!`
+  } else if (message === "too-short") {
+    searchHintDesktopEl.innerHTML = `Can't search for nothing!`
+    searchHintMobileEl.innerHTML = `Can't search for nothing!`
   }
 }
 
@@ -117,9 +120,23 @@ const clearSearch = event => {
   searchInputEl.focus()
 }
 
-document.addEventListener('keyup', handleSearchInput);
+// Event handlers for deciding to run a search query
+document.addEventListener('keyup', event => {
+  if (event.key === 'Enter') {
+    if (searchInputEl === document.activeElement) {
+      // blurring calls the search input, so we don't need to specifically invoke it here.
+      searchInputEl.blur()
+    } else handleSearchInput(event)
+  }
+});
+
+// we do this to get around iOS's undesirable behaviour of not being able to detect when the Done button is clicked. We have to see when the search box loses focus instead.
+searchInputEl.addEventListener('blur', handleSearchInput);
+
+// Event handlers for rerunning a search query
 videosEl.addEventListener('click', handleSearchInput);
 searchHintMobileEl.addEventListener('click', handleSearchInput);
+
 clearSearchEl.addEventListener('click', clearSearch);
 
 document.addEventListener('keyup', event => {
