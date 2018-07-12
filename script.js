@@ -29,7 +29,10 @@ const fetchSearchResults = searchTerm => {
       throw new Error();
     }
   })
-  .catch(error => updateSearchHint('no-results', searchTerm));
+  .catch(error => {
+    updateSearchHint('no-results', searchTerm)
+    showLoading(false)
+  });
 }
 
 const searchGiphy = searchTerm => {  
@@ -42,7 +45,8 @@ const searchGiphy = searchTerm => {
     }
   })
   .catch(error => {
-    console.log("Giphy doesn't seem to be working right now");
+    updateSearchHint('connection-down')
+    showLoading(false)
   });
 };
 
@@ -96,6 +100,9 @@ const updateSearchHint = (message, searchTerm = '') => {
   } else if (message === "clear") { 
     searchHintDesktopEl.innerHTML = ''
     searchHintMobileEl.innerHTML = ''
+  } else if (message === "connection-down") {
+    searchHintDesktopEl.innerHTML = `Sorry, we can't seem to connect to Giphy. Try later!`
+    searchHintMobileEl.innerHTML = `Sorry, we can't seem to connect to Giphy. Try later!`
   }
 }
 
