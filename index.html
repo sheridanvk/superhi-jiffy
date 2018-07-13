@@ -26,8 +26,11 @@
       </a>
     </div>
 
-    <div class="middle">
-      <input class="search-input full-area" placeholder="Type something">
+    <div class="middle grid">
+      <!-- In order to show a Search instead of an Enter button on mobile keyboards, we have to add a type='search', and wrap the input with a form element, with an action that we will suppress in JS -->
+      <form class="full-area" action="">
+        <input class="search-input full-area" placeholder="Type something" type="search">
+      </form>
       <div class="videos grid full-area"></div>
     </div>
 
