@@ -4,6 +4,7 @@ const searchInputEl = document.querySelector('.search-input');
 const searchHintDesktopEl = document.querySelector('.search-hint.desktop');
 const searchHintMobileEl = document.querySelector('.search-hint.mobile');
 const clearSearchEl = document.querySelector('.search-clear');
+const formEl = document.querySelector('form');
 
 const handleSearchInput = event => {
   const searchTerm = searchInputEl.value
@@ -123,15 +124,10 @@ const clearSearch = event => {
 // Event handlers for deciding to run a search query
 document.addEventListener('keyup', event => {
   if (event.key === 'Enter') {
-    if (searchInputEl === document.activeElement) {
-      // blurring calls the search input, so we don't need to specifically invoke it here.
-      searchInputEl.blur()
-    } else handleSearchInput(event)
+    searchInputEl.blur()
+    handleSearchInput(event)
   }
 });
-
-// we do this to get around iOS's undesirable behaviour of not being able to detect when the Done button is clicked. We have to see when the search box loses focus instead.
-searchInputEl.addEventListener('blur', handleSearchInput);
 
 // Event handlers for rerunning a search query
 videosEl.addEventListener('click', handleSearchInput);
@@ -144,3 +140,9 @@ document.addEventListener('keyup', event => {
     clearSearch();
   }
 });
+
+// The only reason we have the form tag is to enable the Enter button to be renamed Search on iOS, so we block the form from taking its action when clicked. 
+formEl.addEventListener('submit', event => { 
+  event.preventDefault()
+});
+      
