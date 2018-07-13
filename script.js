@@ -74,12 +74,12 @@ const displayGif = src => {
   video.addEventListener('loadeddata', event => {
     video.classList.add('visible')
     document.body.classList.add('has-results')
+    showLoading(false)
   }) 
   
   video.muted = true
   video.playsInline = true
   video.play()
-  showLoading(false)
 }
 
 const createVideo = src => {
