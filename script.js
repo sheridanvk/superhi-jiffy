@@ -61,6 +61,16 @@ const displayGif = src => {
   videosEl.style.display = 'grid'
   videosEl.appendChild(video)
   
+  // We don't want too many videos playing at once, as the performance degrades (and new videos can't be played on iOS)
+  if (document.querySelectorAll('video').length > 9) {
+    // We need to firstly reset the video URL, and then reload it, to free up hardware resources (per this post: https://bugs.webkit.org/show_bug.cgi?id=162366#c32
+    // We don't want to then remove videos, because it changes the orientation of the video stack (due to the nth-child CSS rule)
+    // We only look for videos where the src is not blank (to make sure we don't select a video that we already disabled.
+    const disableVideo =  document.querySelector('video[src]:not([src=""])');
+    disableVideo.setAttribute('src','')
+    disableVideo.load()
+  }
+  
   video.addEventListener('loadeddata', event => {
     video.classList.add('visible')
     document.body.classList.add('has-results')
