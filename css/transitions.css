@@ -4,7 +4,6 @@ video {
   transition: all 0.5s ease;
 }
 
-/* we'll start this at the end of the stack as we're deleting things at the bottom of the stack, and we don't want the pile rotation to change when they're removed */
 .visible {
   transform: scale(1) rotate(0deg);
   opacity: 1;
